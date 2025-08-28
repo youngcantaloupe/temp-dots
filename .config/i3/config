@@ -1,0 +1,242 @@
+# Should you change your keyboard layout some time, delete
+# this file and re-run i3-config-wizard(1).
+
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+# ─── General Config ──────────────────────────────────────────────────────
+
+set $mod Mod4
+
+# POLYBAR | PICOM
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
+
+# NO SLEEP
+exec --no-startup-id xset s off
+exec --no-startup-id xset -dpms
+
+# tray tools
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
+exec --no-startup-id pasystray
+exec --no-startup-id picom --experimental-backends
+
+
+# ─── Visual Config ──────────────────────────────────────────────────────
+
+# FONT
+font pango:Terminess Nerd Font 9.5
+
+# COLORS
+set $black #000000
+set $dark_gray #161616
+set $gray #282828
+set $mid_gray #3d3d3d
+set $light_gray #dfdfe0
+set $off_white #f2f4f8
+set $white #FFFFFF
+set $red #ee5396
+set $green #25be6a
+set $teal #08bdba
+set $blue #78a9ff
+set $purple #be95ff
+set $royal_blue #33b1ff
+
+# BORDERS
+default_border pixel 1
+default_floating_border pixel 2
+hide_edge_borders smart_no_gaps
+
+# SET COLORS | <class> <border> <background> <text> <indicator> <child_border>
+client.focused $green $black $green $purple $green
+client.focused_inactive $green $black $light_gray $purple $black
+client.unfocused $black $black $mid_gray $purple $black
+
+# Background
+#exec --no-startup-id feh --bg-scale ~/Documents/Pictures/Wallpapers/moon.jpg
+#exec --no-startup-id feh --randomize --bg-fill /home/kakashi/Documents/Pictures/NatureWallpapers 
+#exec --no-startup-id feh --randomize --bg-fill /home/kakashi/Documents/Pictures/AnimeWallpapers --bg-fill /home/kakashi/Documents/Pictures/Wallpapers
+#exec --no-startup-id feh --randomize --bg-fill /home/kakashi/Documents/Pictures/AnimeWallpapers --randomize --bg-fill /home/kakashi/Documents/Pictures/Wallpapers
+
+
+# MONITORS
+# Dual monitor setup (default)
+exec --no-startup-id xrandr --output DP-0 --primary --mode 2560x1440 --rate 164.54 --output HDMI-0 --mode 1920x1080 --rate 239.96 --right-of DP-0
+
+# exec --no-startup-id xrandr --output DP-0 --primary --mode 1920x1080 --rate 239.96
+
+
+# ─── Keybinds ──────────────────────────────────────────────────────
+
+# SET TERM
+bindsym $mod+Return exec kitty
+
+# KILL
+bindsym $mod+Shift+q kill
+
+# DMENU | rofi
+bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-1/launcher.sh
+# bindsym $mod+d exec dmenu_run
+bindsym $mod+Shift+p exec --no-startup-id ~/.config/rofi/powermenu/type-2/powermenu.sh
+
+# SYSTEM | Adjust Volume | Media Controls | Brightness
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+bindsym xf86audioprev exec playerctl previous
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+
+bindsym XF86MonBrightnessUp exec brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+
+# MOVEMENT | Focus Container | Move Container 
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# SPLIT CONFIG | Horizontal | Vertical | Fullscreen
+#bindsym $mod+b split b 
+bindsym $mod+v split v 
+bindsym $mod+f fullscreen
+
+# CONTAINER LAYOUT | stacked | tapped | toggle split
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout splith
+
+
+# RELOAD CONFIG
+bindsym $mod+Shift+c reload
+
+# RESTART i3 | preserves your layout/session, can be used to upgrade i3
+bindsym $mod+Shift+r restart
+
+# EXIT
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# RESIZE WINDOW | Mouse is enabled
+mode "resize" {
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+
+# ─── Floating Windows ──────────────────────────────────────────────────────
+
+# TOGGLE | Tiling/Floating
+bindsym $mod+Shift+space floating toggle
+
+# CHANGE FOCUS | Tiling/Floating | Parent | Child
+bindsym $mod+space focus mode_toggle
+#bindsym $mod+a focus parent
+#bindsym $mod+d focus child
+
+# MOUSE | Drag floating windows
+floating_modifier $mod
+
+# FLOATING WINDOWS | Get window id from xprop
+for_window [class="feh"] floating enable
+for_window [class="sun-awt-X11-XframePeer"] floating enable
+#for_window [class="org.gnome.clocks"] floating enable
+
+
+# ─── Workspaces ──────────────────────────────────────────────────────
+
+set $monitor1 "DP-0"
+set $monitor2 "HDMI-0"
+
+# WORKSPACE NAMES
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9" 
+set $ws10 "10"
+
+# SWITCH WORKSPACE
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+bindsym $mod+a workspace number "11"
+
+# ASSIGN WORKSPACES
+workspace $ws1 output DP-0
+workspace $ws2 output DP-0
+workspace $ws3 output DP-0
+workspace $ws4 output DP-0
+workspace $ws5 output DP-0
+workspace $ws6 output HDMI-0
+workspace $ws7 output HDMI-0
+workspace $ws8 output HDMI-0
+workspace $ws9 output HDMI-0
+workspace $ws10 output HDMI-0
+workspace 11 output HDMI-0
+
+# MOVE CONTAINER
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# CUSTOM WORKSPACES | Use class from xprop to open to specific workspace
+#assign [class="kitty"] $ws1
+#assign [class="firefox"] $ws2
+#assign [class="obsidian"] $ws3
+#assign [class="Spotify"] $ws10
+
+
+# ─── i3 Bar ──────────────────────────────────────────────────────
+# bar {
+#        status_command i3status
+# }

@@ -1,0 +1,10 @@
+[directory]
+style = "fg:#25be6a"
+format = "[ $path ]($style)"
+truncation_length = 2
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "fg:#445963"
+format = '[ $symbol $branch ]($style)'
