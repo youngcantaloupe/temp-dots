@@ -12,7 +12,7 @@
 - mpv
 - slim rofi
 
--
+- tmux & nvim registers to system clipboard but not base kitty ... ?
 
 
 #### add
